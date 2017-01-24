@@ -1,0 +1,69 @@
+<?php
+/**
+ * Copyright © 2016 Mozg. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+/*dump($this->getData());
+dump(get_class_methods(get_class($this)));
+dump(get_class_vars(get_class($this)));*/
+
+?>
+
+<!-- <?php echo get_class($this) ?> -->
+
+<script type="text/javascript">
+console.log('<?php echo get_class($this) ?>');
+</script>
+
+<?php if ($this->isBoletoPayment()): ?>
+<div class="mozg-boleto-download-pdf">
+    <?php echo Mage::helper('downloadable')->__('<a href="%s">Click here to download the Boleto payment PDF</a>', $this->getPaymentUrl()) ?>
+</div>
+<?php endif; ?>
+
+<?php if ($this->isEletronicTransferPayment()): ?>
+<div class="mozg-eletronictransfer-download-pdf">
+    <?php echo Mage::helper('downloadable')->__('<a href="%s">Click here to process the EletronicTransfer payment</a>', $this->getPaymentUrl()) ?>
+</div>
+<?php endif; ?>
+
+<?php if ($this->isCcPayment()): ?>
+<div class="mozg-cc-download-pdf">
+
+<div id="ajax-mozg-success" style="border:1px solid red;">Aguarde o envio da notificação</div>
+
+<script>
+
+
+	
+
+	var url = '<?php echo $this->getPaymentNotificationUrl(); ?>';
+
+	var element = 'ajax-mozg-success';
+
+	var req = new Ajax.Request( url, {
+	    method: 'get',
+	    asynchronous: false,
+	    onLoading: function(transport) {
+	    },
+	    onCreate: function(transport) {
+	        
+	    },
+	    onComplete: function(transport) {
+	        
+	        //console.dir(transport);
+
+	        $(element).innerHTML = transport.responseText;
+	        
+	    }
+	});
+
+	console.log(req);
+
+</script>
+
+</div>
+<?php endif; ?>
+
+<!-- / <?php echo get_class($this) ?> -->
