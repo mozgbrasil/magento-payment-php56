@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Mozg. All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+-->
+<layout version="0.1.0">
+
+    <mozg_updatecart_index>
+        <update handle="checkout_cart_index" />
+    </mozg_updatecart_index>
+
+    <checkout_cart_index>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/mozg_payment/style.css</stylesheet>
+            </action>
+        </reference>
+        <!--<reference name="top.container">
+            <block type="mozg_payment/scanProduct" name="mozg.scanProduct" template="mozg_payment/scan_product.phtml"/>
+        </reference>
+        <reference name="checkout.cart.methods">
+            <block type="mozg_payment/posExpressCheckout" before="-" name="mozg.pos.express.checkout" template="mozg_payment/pos_express_checkout.phtml"/>
+        </reference>-->
+    </checkout_cart_index>
+
+    <handle_mozg_payment_validator>
+        <reference name="after_body_start">
+            <block type="core/text" name="mozg_payment_validator" after="-">
+                <action method="setText">
+                    <text>
+                        <![CDATA[<script type="text/javascript">
+                            Validation.creditCartTypes.set('DC', [new RegExp('^3(?:0[0-5]|[68][0-9])[0-9]{11}$'), new RegExp('^[0-9]{3}$'), true]);
+                            Validation.creditCartTypes.set('CB', [new RegExp('^4[0-9]{12}([0-9]{3})?$'), new RegExp('^[0-9]{3}$'), true]);
+                            Validation.creditCartTypes.set('ELO', [new RegExp(/^((((636368)|(438935)|(504175)|(451416)|(636297)|(506699))\d{0,10})|((5067)|(4576)|(4011))\d{0,12})$/), new RegExp('^[0-9]{3}$'), true]);
+                            Validation.creditCartTypes.set('hipercard', [new RegExp(/^(606282\d{10}(\d{3})?)|(3841\d{15})$/), new RegExp('^[0-9]{3}$'), true]);
+                            Validation.creditCartTypes.set('unionpay', [new RegExp('^62[0-5]\d{13,16}$'), new RegExp('^[0-9]{3}$'), true]);
+                            /* https://gist.github.com/erikhenrique/5931368 */
+                            Validation.creditCartTypes.set('AU', [new RegExp('^50[0-9]{14,17}$'), new RegExp('^[0-9]{3}$'), true]);
+                            Validation.creditCartTypes.set('hiper', [new RegExp(/^(637095\d{10}(\d{3})?)|(3841\d{15})$/), new RegExp('^[0-9]{3}$'), true]);
+                        </script>]]>
+                    </text>
+                </action>
+            </block>
+        </reference>
+    </handle_mozg_payment_validator>
+
+    <checkout_onepage_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>mozg_payment/payment/cc.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addJs">
+                <script>mozg_payment/payment/pci.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <!--<action method="addCss">
+                <stylesheet>css/mozg_payment/style.css</stylesheet>
+            </action>-->
+        </reference>
+
+        <update handle="handle_mozg_payment_validator"/>
+
+    </checkout_onepage_index>
+
+    <!-- For the Idev onestepcheckout module !-->
+    <onestepcheckout_index_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>mozg_payment/payment/cc.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addJs">
+                <script>mozg_payment/payment/pci.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/mozg_payment/style.css</stylesheet>
+            </action>
+        </reference>
+
+        <update handle="handle_mozg_payment_validator"/>
+
+    </onestepcheckout_index_index>
+
+    <!-- For the IWD onestep checkout module !-->
+    <opc_index_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>mozg_payment/payment/cc.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addJs">
+                <script>mozg_payment/payment/pci.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/mozg_payment/style.css</stylesheet>
+            </action>
+        </reference>
+
+        <update handle="handle_mozg_payment_validator"/>
+
+    </opc_index_index>
+
+    <checkout_multishipping_billing>
+        <reference name="head">
+            <action method="addJs">
+                <script>mozg_payment/payment/cc.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addJs">
+                <script>mozg_payment/payment/pci.js</script>
+                <params><![CDATA[name=""]]></params>
+            </action>
+            <action method="addCss">
+                <stylesheet>css/mozg_payment/style.css</stylesheet>
+            </action>
+        </reference>
+    </checkout_multishipping_billing>
+
+    <handle_mozg_payment_checkout>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>css/mozg_payment/style.css</stylesheet>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="mozg_payment/checkout_onepage_success_info" />
+            <block type="sales/order_items" name="order_items" template="sales/order/items.phtml">
+                <action method="addItemRender">
+                    <type>default</type>
+                    <block>sales/order_item_renderer_default</block>
+                    <template>sales/order/items/renderer/default.phtml</template>
+                </action>
+                <action method="addItemRender">
+                    <type>grouped</type>
+                    <block>sales/order_item_renderer_grouped</block>
+                    <template>sales/order/items/renderer/default.phtml</template>
+                </action>
+                <block type="sales/order_totals" name="order_totals" template="sales/order/totals.phtml">
+                    <action method="setLabelProperties">
+                        <value>colspan="4" class="a-right"</value>
+                    </action>
+                    <action method="setValueProperties">
+                        <value>class="last a-right"</value>
+                    </action>
+                    <block type="tax/sales_order_tax" name="tax" template="tax/order/tax.phtml" />
+                </block>
+            </block>
+            <block type="mozg_payment/checkout_onepage_success_additional" />
+        </reference>
+        <!--<reference name="top.container">
+            <block type="mozg_payment/checkout_onepage_success" name="mozg.payment.top.container" template="mozg_payment/checkout/onepage/success/top.phtml"/>
+        </reference>
+        <reference name="checkout.success">
+            <block type="mozg_payment/checkout_onepage_success" name="mozg.payment.checkout.success" template="mozg_payment/checkout/onepage/success.phtml"/>
+        </reference>-->
+    </handle_mozg_payment_checkout>
+
+    <checkout_onepage_success translate="label">
+        <update handle="handle_mozg_payment_checkout"/>
+    </checkout_onepage_success>
+
+    <checkout_multishipping_success translate="label">
+        <update handle="handle_mozg_payment_checkout"/>
+    </checkout_multishipping_success>
+
+    <onestepcheckout_index_success translate="label">
+        <update handle="handle_mozg_payment_checkout"/>
+    </onestepcheckout_index_success>
+
+</layout>
